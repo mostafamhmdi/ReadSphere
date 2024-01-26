@@ -22,7 +22,7 @@
       
       try{
 
-        $stmt = $db->prepare("SELECT * FROM book");
+        $stmt = $db->prepare("SELECT name , author,genres FROM book");
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         

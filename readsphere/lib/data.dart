@@ -2,40 +2,33 @@ import 'package:dio/dio.dart';
 
 class Book {
   final int id;
-  final String image;
   final String name;
-  final String description;
   final String author;
-  final int price;
-  final String genre;
+  final String rating;
+  final String description;
+  final String genres;
+  final String price;
+  final String book_path;
+  Book(
+    this.id,
+    this.name,
+    this.author,
+    this.rating,
+    this.description,
+    this.price,
+    this.genres,
+    this.book_path,
+  );
 
-  Book(this.id, this.image, this.name, this.description, this.author,
-      this.price, this.genre);
-
-  // factory Book.fromJson(Map<String, dynamic> json) {
-  //   return Book(
-  //     json['id'],
-  //     json['image'],
-  //     json['name'],
-
-  //     json['avg'],
-  //   );
-  // }
-
-  // Map<String, dynamic> toJson() => {
-  //       'name': name,
-  //       'avg': avg,
-  //     };
   Book.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        image = json['image'],
         name = json['name'],
-        description = json['description'],
         author = json['author'],
-        // price = json['price'],
-        // price = int.parse(json['price']),
-        price = int.tryParse(json['price'].toString()) ?? 0,
-        genre = json['genre'];
+        rating = json['rating'],
+        description = json['description'],
+        genres = json['genres'],
+        price = json['price'],
+        book_path = json['book_path'];
 }
 
 class HttpClient {
@@ -43,8 +36,23 @@ class HttpClient {
       Dio(BaseOptions(baseUrl: 'https://mostafamohammadi.liara.run/'));
 }
 
-Future<List<Book>> getBooks() async {
-  final response = await HttpClient.instance.get('list.php');
+Future<List<Book>> getGenres(String selectedGenre) async {
+  final response = await HttpClient.instance
+      .get('genres.php', queryParameters: {'genre': selectedGenre});
+  final List<Book> books = [];
+
+  if (response.data is List<dynamic>) {
+    for (var element in (response.data as List<dynamic>)) {
+      books.add(Book.fromJson(element));
+    }
+  }
+
+  return books;
+}
+
+Future<List<Book>> getBooks(String selectedName) async {
+  final response = await HttpClient.instance
+      .get('books.php', queryParameters: {'name': selectedName});
   final List<Book> books = [];
 
   if (response.data is List<dynamic>) {

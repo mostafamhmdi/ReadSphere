@@ -2,15 +2,16 @@
 header('Content-Type: application/json');
 include "./db.php";
 
-$image = $_POST['image'];
 $name = $_POST['name'];
-$description = $_POST['description'];
 $author = $_POST['author'];
+$rating = $_POST['rating'];
+$description = $_POST['description'];
+$genres = $_POST['genres'];
 $price = $_POST['price'];
-$genre = $_POST['genre'];
+$book_path = $_POST['book_path'];
 
-$stmt = $db->prepare("INSERT INTO book (image, name, description, author, price,genre) VALUES (?, ?, ?, ?, ?,?");
-$result = $stmt->execute([$image, $name, $description, $author, $price,$genre]);
+$stmt = $db->prepare("INSERT INTO book ( name,author,rating, description,  genres,price,book_path) VALUES (?, ?, ?, ?, ?,?,?");
+$result = $stmt->execute([$name,$author, $rating, $description,$genres,$price,$image]);
 
 echo json_encode([
     'success' => $result
