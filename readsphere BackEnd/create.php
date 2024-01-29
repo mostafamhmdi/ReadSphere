@@ -10,11 +10,10 @@ $genres = $_POST['genres'];
 $price = $_POST['price'];
 $book_path = $_POST['book_path'];
 
-$stmt = $db->prepare("INSERT INTO book ( name,author,rating, description,  genres,price,book_path) VALUES (?, ?, ?, ?, ?,?,?");
-$result = $stmt->execute([$name,$author, $rating, $description,$genres,$price,$image]);
+$stmt = $db->prepare("INSERT INTO book (name, author, rating, description, genres, price, book_path) VALUES (?, ?, ?, ?, ?, ?, ?)");
+$result = $stmt->execute([$name, $author, $rating, $description, $genres, $price, $book_path]);
 
 echo json_encode([
     'success' => $result
 ]);
-
 ?>

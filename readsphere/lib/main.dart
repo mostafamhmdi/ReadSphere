@@ -1,14 +1,21 @@
-// ignore_for_file: depend_on_referenced_packages
-
-import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:readsphere/data.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:readsphere/fav_books.dart';
+
+import 'package:readsphere/showBooks.dart';
+import 'package:readsphere/addbook.dart';
 
 void main() {
   runApp(const MyApp());
+}
+
+class AppColors {
+  static const Color primaryColor = Color.fromRGBO(234, 234, 234, 1);
+  static const Color accentColor = Color.fromRGBO(9, 19, 25, 1);
+  static const Color secondaryColor = Color.fromRGBO(234, 141, 0, 1);
+  // static const Color secondaryColor = Color.fromRGBO(51, 51, 51, 1);
 }
 
 class MyApp extends StatelessWidget {
@@ -47,82 +54,123 @@ class Categories extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
+    var _selectedIndex = 0;
+
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(28, 31, 33, 1),
+      backgroundColor: AppColors.accentColor,
       appBar: AppBar(
-        title: const Text(
-          'Readsphere',
-          style: TextStyle(color: Colors.white),
-          textAlign: TextAlign.center,
+        // title: const Text(
+        //   'Readsphere',
+        //   style: TextStyle(color: Colors.white),
+        //   textAlign: TextAlign.center,
+        // ),
+        iconTheme: IconThemeData(
+          color: AppColors.accentColor,
         ),
-        backgroundColor: const Color.fromRGBO(28, 31, 33, 1),
+        backgroundColor: AppColors.accentColor,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: categories.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Center(
-                child: SizedBox(
-                  width: 300,
-                  child: CategoryCard(category: categories[index]),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30.0),
-          topRight: Radius.circular(30.0),
-          bottomLeft: Radius.circular(30.0),
-          bottomRight: Radius.circular(30.0),
-        ),
-        child: SizedBox(
-          height: 90,
-          child: BottomNavigationBar(
-            backgroundColor: const Color.fromRGBO(255, 191, 0, 1),
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(
-                  FontAwesomeIcons.gears,
-                  size: 40,
-                ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  FontAwesomeIcons.book,
-                  size: 40,
-                ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  FontAwesomeIcons.userTie,
-                  size: 40,
-                ),
-                label: '',
-              ),
-            ],
-            selectedItemColor: const Color.fromRGBO(28, 31, 33, 1),
-            unselectedItemColor: const Color.fromRGBO(28, 31, 33, 0.5),
-            currentIndex: 1,
-            onTap: (index) {
-              if (index == 0) {
-                // Handle navigation to settings
-              } else if (index == 2) {
-                // Handle navigation to user profile
-              }
-            },
+      body: Column(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.01,
           ),
-        ),
+          Text(
+            'REDASPHERE',
+            style: TextStyle(fontSize: 35, color: Colors.white),
+          ),
+          Expanded(
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 5.0, vertical: 10),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Center(
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.75,
+                        child: CategoryCard(category: categories[index]),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(50.0),
+              topRight: Radius.circular(50.0),
+              bottomLeft: Radius.circular(50.0),
+              bottomRight: Radius.circular(50.0),
+            ),
+            child: Container(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).size.height * 0.01),
+              width: MediaQuery.of(context).size.width * 0.9,
+              height: MediaQuery.of(context).size.height * 0.1,
+              color: AppColors.secondaryColor,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15.0, vertical: 8),
+                    child: GNav(
+                      selectedIndex: _selectedIndex,
+                      // backgroundColor: Colors.black,
+                      rippleColor: AppColors.accentColor,
+                      hoverColor: AppColors.accentColor,
+                      tabBackgroundColor: AppColors.accentColor,
+                      gap: 8,
+                      activeColor: AppColors.secondaryColor,
+                      iconSize: 24,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                      duration: Duration(milliseconds: 400),
+                      // tabBackgroundColor: Colors.grey[100]!,
+                      color: AppColors.primaryColor,
+                      tabs: [
+                        GButton(
+                          icon: Icons.home,
+                          text: 'Home',
+                        ),
+                        GButton(
+                          icon: CupertinoIcons.book,
+                          text: 'Add',
+                        ),
+                        GButton(
+                          icon: Icons.favorite_border,
+                          text: 'Favorites',
+                        ),
+                        GButton(
+                          icon: FontAwesomeIcons.user,
+                          text: 'Profile',
+                        ),
+                      ],
+                      onTabChange: (index) {
+                        if (index == 1) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AddBook()),
+                          );
+                        } else if (index == 2) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FavoriteBook()),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -145,29 +193,23 @@ class CategoryCard extends StatelessWidget {
         );
       },
       child: Container(
-        height: 500,
+        height: MediaQuery.of(context).size.height * 0.5,
         alignment: Alignment.center,
         padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),
         margin: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(25.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade600,
-              spreadRadius: 1,
-              blurRadius: 5,
-              offset: const Offset(0, 5),
-            ),
-            BoxShadow(
-              color: Colors.grey.shade300,
-              offset: const Offset(-5, 0),
-            ),
-            BoxShadow(
-              color: Colors.grey.shade300,
-              offset: const Offset(5, 0),
-            )
-          ],
+          color: Color.fromRGBO(234, 234, 234, 1),
+          // color: Color.fromRGBO(110, 68, 254, 1),
+          // color: Color.fromRGBO(69, 69, 69, 1),
+          borderRadius: BorderRadius.circular(40.0),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Color.fromRGBO(217, 207, 206, 1),
+          //     spreadRadius: 1,
+          //     blurRadius: 5,
+          //     offset: const Offset(0, 5),
+          //   ),
+          // ],
         ),
         child: Stack(
           clipBehavior: Clip.none,
@@ -175,46 +217,50 @@ class CategoryCard extends StatelessWidget {
             Column(
               children: [
                 SizedBox(
-                  height: 10,
+                  height: MediaQuery.of(context).size.height * 0.01,
                 ),
                 Text(
                   category.name,
                   style: const TextStyle(
                     fontSize: 27,
                     color: Colors.black,
-                    fontWeight: FontWeight.w500,
+                    // color: Color.fromRGBO(81, 113, 150, 1),
+                    fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
-                  height: 60,
+                  height: MediaQuery.of(context).size.height * 0.04,
                 ),
                 Image.network(
                   category.imageUrl,
-                  height: 200,
+                  height: MediaQuery.of(context).size.height * 0.22,
                   fit: BoxFit.cover,
                 ),
               ],
             ),
             Positioned(
-              right: -46,
+              right: -MediaQuery.of(context).size.width * 0.12,
               // left: 0,
               bottom: 0,
               child: Container(
-                width: 120, // Adjust the width as needed
-                height: 120, // Adjust the height as needed
+                width: MediaQuery.of(context).size.width *
+                    0.25, // Adjust the width as needed
+                height: MediaQuery.of(context).size.height *
+                    0.12, // Adjust the height as needed
                 decoration: BoxDecoration(
-                  color: const Color.fromRGBO(255, 191, 0, 1),
+                  color: AppColors.secondaryColor,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(35.0),
-                    bottomRight: Radius.circular(25.0),
+                    bottomRight: Radius.circular(35.0),
                     bottomLeft: Radius.circular(5.0),
                     topRight: Radius.circular(5.0),
                   ),
                 ),
                 child: Icon(
-                  FontAwesomeIcons.heart,
+                  FontAwesomeIcons.add,
                   size: 40,
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -230,543 +276,4 @@ class CategoryData {
   final String imageUrl;
 
   const CategoryData(this.name, this.imageUrl);
-}
-
-class BookPage extends StatefulWidget {
-  final String genre;
-  const BookPage({Key? key, required this.genre}) : super(key: key);
-
-  @override
-  State<BookPage> createState() => _BookPage();
-}
-
-class _BookPage extends State<BookPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(28, 31, 33, 1),
-        iconTheme: IconThemeData(color: Colors.white),
-      ),
-      backgroundColor: Color.fromRGBO(28, 31, 33, 1),
-      body: Column(
-        children: [
-          // Add your text here
-          Padding(
-            padding: const EdgeInsets.all(1.0),
-            child: Text(
-              widget.genre,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 23.0,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          // FutureBuilder for your ListView
-          Expanded(
-            child: FutureBuilder<List<Book>>(
-              future: getGenres(widget.genre),
-              builder: (context, snapshot) {
-                if (snapshot.hasData && snapshot.data != null) {
-                  return ListView.builder(
-                    padding: const EdgeInsets.only(bottom: 84),
-                    itemCount: (snapshot.data!.length / 2).ceil(),
-                    itemBuilder: (context, index) {
-                      int startIndex = index * 2;
-                      int endIndex = (index + 1) * 2;
-                      if (endIndex > snapshot.data!.length) {
-                        endIndex = snapshot.data!.length;
-                      }
-
-                      List<Book> rowData =
-                          snapshot.data!.sublist(startIndex, endIndex);
-
-                      return _BookRow(data: rowData);
-                    },
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              },
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30.0),
-          topRight: Radius.circular(30.0),
-          bottomLeft: Radius.circular(30.0),
-          bottomRight: Radius.circular(30.0),
-        ),
-        child: SizedBox(
-          height: 90,
-          child: BottomNavigationBar(
-            backgroundColor: const Color.fromRGBO(255, 191, 0, 1),
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(
-                  FontAwesomeIcons.gears,
-                  size: 40,
-                ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  FontAwesomeIcons.book,
-                  size: 40,
-                ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  FontAwesomeIcons.userTie,
-                  size: 40,
-                ),
-                label: '',
-              ),
-            ],
-            selectedItemColor: const Color.fromRGBO(28, 31, 33, 1),
-            unselectedItemColor: const Color.fromRGBO(28, 31, 33, 0.5),
-            currentIndex: 1,
-            onTap: (index) {
-              if (index == 0) {
-                // Handle navigation to settings
-              } else if (index == 2) {
-                // Handle navigation to user profile
-              }
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _BookRow extends StatelessWidget {
-  final List<Book> data;
-
-  const _BookRow({Key? key, required this.data}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _Book(data: data[0]),
-        if (data.length > 1) _Book(data: data[1]),
-      ],
-    );
-  }
-}
-
-class _Book extends StatelessWidget {
-  final Book data;
-
-  const _Book({Key? key, required this.data}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 10, 8, 10),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: GestureDetector(
-          onTap: () {
-            // Navigate to another page when the image is tapped
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BookDetails(name: data.name),
-              ),
-            );
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.black, // Set the background color here
-              boxShadow: [
-                BoxShadow(
-                  blurRadius: 10,
-                  color:
-                      const Color.fromARGB(255, 255, 253, 253).withOpacity(0.5),
-                  spreadRadius: 2,
-                  offset: Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Container(
-              color: Colors.white12, // Set your desired background color here
-              child: Column(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                        15.0), // Set your desired border radius here
-                    child: Image.network(
-                      data.book_path,
-                      fit: BoxFit.cover,
-                      height: 300,
-                      width: MediaQuery.of(context).size.width / 2 - 16,
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  RatingBar.builder(
-                    initialRating: double.parse(data.rating),
-                    minRating: 1,
-                    direction: Axis.horizontal,
-                    allowHalfRating: true,
-                    itemCount: 5,
-                    itemSize: 25.0,
-                    unratedColor: Colors.grey,
-                    itemBuilder: (context, _) => Material(
-                      type: MaterialType.transparency,
-                      child: Icon(
-                        Icons.star,
-                        color: Color.fromRGBO(255, 191, 0, 1),
-                      ),
-                    ),
-                    onRatingUpdate: (rating) {
-                      // Handle the rating update
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class BookDetails extends StatefulWidget {
-  final String name;
-  const BookDetails({Key? key, required this.name}) : super(key: key);
-
-  @override
-  State<BookDetails> createState() => _BookDetails();
-}
-
-class _BookDetails extends State<BookDetails> {
-  bool isHeartRed = false;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(28, 31, 33, 1),
-        iconTheme: IconThemeData(color: Colors.white),
-      ),
-      backgroundColor: Color.fromRGBO(28, 31, 33, 1),
-      body: FutureBuilder<List<Book>>(
-        future: getBooks(widget.name),
-        builder: (context, snapshot) {
-          if (snapshot.hasData && snapshot.data != null) {
-            List<Book> books = snapshot.data!;
-
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: ListView.builder(
-                itemCount: books.length,
-                itemBuilder: (context, index) {
-                  Book book = books[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(20.0),
-                              child: Image.network(
-                                book.book_path,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.45,
-                                width: MediaQuery.of(context).size.width * 0.6,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.05,
-                            ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.star,
-                                      color: Color.fromRGBO(255, 191, 0, 1),
-                                      size: 28,
-                                    ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.015,
-                                    ),
-                                    Text(
-                                      book.rating,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w800),
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.09,
-                                    ),
-                                    Text(
-                                      'Rating',
-                                      style: TextStyle(
-                                          color: Color.fromARGB(
-                                              100, 255, 255, 255),
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w700),
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.07,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      FontAwesomeIcons.bookOpenReader,
-                                      color: Color.fromRGBO(252, 10, 10, 0.737),
-                                      size: 28,
-                                    ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.015,
-                                    ),
-                                    Text(
-                                      '${Random(10).nextInt(344) + 195}',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w800),
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.09,
-                                    ),
-                                    Text(
-                                      'Pages',
-                                      style: TextStyle(
-                                          color: Color.fromARGB(
-                                              100, 255, 255, 255),
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.07,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.people,
-                                      color: Color.fromRGBO(252, 10, 10, 0.737),
-                                      size: 28,
-                                    ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.015,
-                                    ),
-                                    Text(
-                                      book.price,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w800),
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.08,
-                                    ),
-                                    Text(
-                                      'Popular',
-                                      style: TextStyle(
-                                          color: Color.fromARGB(
-                                              100, 255, 255, 255),
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.03,
-                        ),
-                        Row(
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: MediaQuery.of(context).size.width *
-                                      0.75, // Set a specific width for the container
-                                  child: Text(
-                                    book.name,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.05,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      isHeartRed =
-                                          !isHeartRed; // Toggle the color on each tap
-                                    });
-                                  },
-                                  child: Icon(
-                                    CupertinoIcons.heart_fill,
-                                    color:
-                                        isHeartRed ? Colors.red : Colors.grey,
-                                    size: 30,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 3,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              book.author,
-                              style: TextStyle(
-                                  color:
-                                      const Color.fromARGB(255, 153, 149, 149),
-                                  fontSize: 20),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.03,
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: new Container(
-                                  margin: const EdgeInsets.only(
-                                      left: 10.0, right: 20.0),
-                                  child: Divider(
-                                    color: Colors.white,
-                                    height: 36,
-                                  )),
-                            ),
-                            Text(
-                              "Description",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 20),
-                            ),
-                            Expanded(
-                              child: new Container(
-                                  margin: const EdgeInsets.only(
-                                      left: 20.0, right: 10.0),
-                                  child: Divider(
-                                    color: Colors.white,
-                                    height: 36,
-                                  )),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          book.description,
-                          style: TextStyle(color: Colors.white, fontSize: 17),
-                        )
-                      ],
-                    ),
-                  );
-                },
-              ),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
-      bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30.0),
-          topRight: Radius.circular(30.0),
-          bottomLeft: Radius.circular(30.0),
-          bottomRight: Radius.circular(30.0),
-        ),
-        child: SizedBox(
-          height: 90,
-          child: BottomNavigationBar(
-            backgroundColor: const Color.fromRGBO(255, 191, 0, 1),
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(
-                  FontAwesomeIcons.gears,
-                  size: 40,
-                ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  FontAwesomeIcons.book,
-                  size: 40,
-                ),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  FontAwesomeIcons.userTie,
-                  size: 40,
-                ),
-                label: '',
-              ),
-            ],
-            selectedItemColor: const Color.fromRGBO(28, 31, 33, 1),
-            unselectedItemColor: const Color.fromRGBO(28, 31, 33, 0.5),
-            currentIndex: 1,
-            onTap: (index) {
-              if (index == 0) {
-                // Handle navigation to settings
-              } else if (index == 2) {
-                // Handle navigation to user profile
-              }
-            },
-          ),
-        ),
-      ),
-    );
-  }
 }
