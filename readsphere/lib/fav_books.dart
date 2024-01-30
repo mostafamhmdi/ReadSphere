@@ -25,6 +25,13 @@ class _FavoriteBook extends State<FavoriteBook> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.accentColor,
+        flexibleSpace: Center(
+          child: Image.network(
+            'https://mostafamohammdi.storage.iran.liara.space/White%20logo%20-%20no%20background.png',
+            width: MediaQuery.of(context).size.width * 0.4,
+            alignment: Alignment.center,
+          ),
+        ),
       ),
       backgroundColor: AppColors.accentColor,
       body: Column(
@@ -35,7 +42,7 @@ class _FavoriteBook extends State<FavoriteBook> {
             child: Text(
               'Favorite Books',
               style: TextStyle(
-                color: Colors.white,
+                color: AppColors.secondaryColor,
                 fontSize: 23.0,
                 fontWeight: FontWeight.w600,
               ),
@@ -71,76 +78,83 @@ class _FavoriteBook extends State<FavoriteBook> {
               },
             ),
           ),
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(50.0),
-              topRight: Radius.circular(50.0),
-              bottomLeft: Radius.circular(50.0),
-              bottomRight: Radius.circular(50.0),
-            ),
-            child: Container(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).size.height * 0.01),
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.1,
-              color: AppColors.secondaryColor,
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15.0, vertical: 8),
-                    child: GNav(
-                      selectedIndex: _selectedIndex,
-                      rippleColor: AppColors.accentColor,
-                      hoverColor: AppColors.accentColor,
-                      tabBackgroundColor: AppColors.accentColor,
-                      gap: 8,
-                      activeColor: AppColors.secondaryColor,
-                      iconSize: 24,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-                      duration: Duration(milliseconds: 400),
-                      color: AppColors.primaryColor,
-                      tabs: [
-                        GButton(
-                          icon: Icons.home,
-                          text: 'Home',
-                        ),
-                        GButton(
-                          icon: CupertinoIcons.book,
-                          text: 'Add',
-                        ),
-                        GButton(
-                          icon: Icons.favorite_border,
-                          text: 'Favorites',
-                        ),
-                        GButton(
-                          icon: FontAwesomeIcons.user,
-                          text: 'Profile',
-                        ),
-                      ],
-                      onTabChange: (index) {
-                        if (index == 0) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Categories()),
-                          );
-                        } else if (index == 1) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => AddBook()),
-                          );
-                        }
-                      },
-                    ),
-                  ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        margin: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: AppColors.secondaryColor,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(50.0),
+            topRight: Radius.circular(50.0),
+            bottomLeft: Radius.circular(50.0),
+            bottomRight: Radius.circular(50.0),
+          ),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20,
+              color: Colors.black.withOpacity(.1),
+            )
+          ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            child: GNav(
+              textStyle: TextStyle(
+                  fontFamily: 'Signika',
+                  color: AppColors.secondaryColor,
+                  fontSize: 20),
+              selectedIndex: _selectedIndex,
+              rippleColor: AppColors.accentColor,
+              hoverColor: AppColors.accentColor,
+              tabBackgroundColor: AppColors.accentColor,
+              gap: 8,
+              activeColor: AppColors.secondaryColor,
+              iconSize: 24,
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+              duration: Duration(milliseconds: 400),
+              // tabBackgroundColor: Colors.grey[100]!,
+              color: AppColors.primaryColor,
+              tabs: [
+                GButton(
+                  icon: Icons.home,
+                  text: 'Home',
                 ),
-              ),
+                GButton(
+                  icon: CupertinoIcons.book,
+                  text: 'Add',
+                ),
+                GButton(
+                  icon: Icons.favorite_border,
+                  text: 'Favorites',
+                ),
+                GButton(
+                  icon: FontAwesomeIcons.user,
+                  text: 'Profile',
+                ),
+              ],
+
+              onTabChange: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+
+                if (index == 0) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Categories()),
+                  );
+                } else if (index == 1) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AddBook()),
+                  );
+                }
+              },
             ),
           ),
-        ],
+        ),
       ),
     );
   }

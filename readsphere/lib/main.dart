@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:readsphere/fav_books.dart';
-
 import 'package:readsphere/showBooks.dart';
 import 'package:readsphere/addbook.dart';
 
@@ -34,8 +33,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Categories extends StatelessWidget {
-//const Categories({Key? key}) : super(key: key);
+class Categories extends StatefulWidget {
+  @override
+  _CategoriesState createState() => _CategoriesState();
+}
+
+class _CategoriesState extends State<Categories> {
+  int _selectedIndex = 0;
   final List<CategoryData> categories = [
     CategoryData('Adventure',
         'https://mostafamohammdi.storage.iran.liara.space/adventure.png'),
@@ -54,16 +58,9 @@ class Categories extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    var _selectedIndex = 0;
-
     return Scaffold(
       backgroundColor: AppColors.accentColor,
       appBar: AppBar(
-        // title: const Text(
-        //   'Readsphere',
-        //   style: TextStyle(color: Colors.white),
-        //   textAlign: TextAlign.center,
-        // ),
         iconTheme: IconThemeData(
           color: AppColors.accentColor,
         ),
@@ -74,9 +71,9 @@ class Categories extends StatelessWidget {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.01,
           ),
-          Text(
-            'REDASPHERE',
-            style: TextStyle(fontSize: 35, color: Colors.white),
+          Image.network(
+            'https://mostafamohammdi.storage.iran.liara.space/White%20logo%20-%20no%20background.png',
+            width: MediaQuery.of(context).size.width * 0.7,
           ),
           Expanded(
             child: Padding(
@@ -99,78 +96,83 @@ class Categories extends StatelessWidget {
               ),
             ),
           ),
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(50.0),
-              topRight: Radius.circular(50.0),
-              bottomLeft: Radius.circular(50.0),
-              bottomRight: Radius.circular(50.0),
-            ),
-            child: Container(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).size.height * 0.01),
-              width: MediaQuery.of(context).size.width * 0.9,
-              height: MediaQuery.of(context).size.height * 0.1,
-              color: AppColors.secondaryColor,
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15.0, vertical: 8),
-                    child: GNav(
-                      selectedIndex: _selectedIndex,
-                      // backgroundColor: Colors.black,
-                      rippleColor: AppColors.accentColor,
-                      hoverColor: AppColors.accentColor,
-                      tabBackgroundColor: AppColors.accentColor,
-                      gap: 8,
-                      activeColor: AppColors.secondaryColor,
-                      iconSize: 24,
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-                      duration: Duration(milliseconds: 400),
-                      // tabBackgroundColor: Colors.grey[100]!,
-                      color: AppColors.primaryColor,
-                      tabs: [
-                        GButton(
-                          icon: Icons.home,
-                          text: 'Home',
-                        ),
-                        GButton(
-                          icon: CupertinoIcons.book,
-                          text: 'Add',
-                        ),
-                        GButton(
-                          icon: Icons.favorite_border,
-                          text: 'Favorites',
-                        ),
-                        GButton(
-                          icon: FontAwesomeIcons.user,
-                          text: 'Profile',
-                        ),
-                      ],
-                      onTabChange: (index) {
-                        if (index == 1) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => AddBook()),
-                          );
-                        } else if (index == 2) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FavoriteBook()),
-                          );
-                        }
-                      },
-                    ),
-                  ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        margin: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: AppColors.secondaryColor,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(50.0),
+            topRight: Radius.circular(50.0),
+            bottomLeft: Radius.circular(50.0),
+            bottomRight: Radius.circular(50.0),
+          ),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20,
+              color: Colors.black.withOpacity(.1),
+            )
+          ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            child: GNav(
+              textStyle: TextStyle(
+                  fontFamily: 'Signika',
+                  color: AppColors.secondaryColor,
+                  fontSize: 20),
+              selectedIndex: _selectedIndex,
+              rippleColor: AppColors.accentColor,
+              hoverColor: AppColors.accentColor,
+              tabBackgroundColor: AppColors.accentColor,
+              gap: 8,
+              activeColor: AppColors.secondaryColor,
+              iconSize: 24,
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+              duration: Duration(milliseconds: 400),
+              // tabBackgroundColor: Colors.grey[100]!,
+              color: AppColors.primaryColor,
+              tabs: [
+                GButton(
+                  icon: Icons.home,
+                  text: 'Home',
                 ),
-              ),
+                GButton(
+                  icon: CupertinoIcons.book,
+                  text: 'Add',
+                ),
+                GButton(
+                  icon: Icons.favorite_border,
+                  text: 'Favorites',
+                ),
+                GButton(
+                  icon: FontAwesomeIcons.user,
+                  text: 'Profile',
+                ),
+              ],
+
+              onTabChange: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+
+                if (index == 1) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AddBook()),
+                  );
+                } else if (index == 2) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FavoriteBook()),
+                  );
+                }
+              },
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -195,21 +197,11 @@ class CategoryCard extends StatelessWidget {
       child: Container(
         height: MediaQuery.of(context).size.height * 0.5,
         alignment: Alignment.center,
-        padding: const EdgeInsets.fromLTRB(4, 8, 4, 0),
+        padding: const EdgeInsets.fromLTRB(4, 8, 0, 0),
         margin: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           color: Color.fromRGBO(234, 234, 234, 1),
-          // color: Color.fromRGBO(110, 68, 254, 1),
-          // color: Color.fromRGBO(69, 69, 69, 1),
           borderRadius: BorderRadius.circular(40.0),
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: Color.fromRGBO(217, 207, 206, 1),
-          //     spreadRadius: 1,
-          //     blurRadius: 5,
-          //     offset: const Offset(0, 5),
-          //   ),
-          // ],
         ),
         child: Stack(
           clipBehavior: Clip.none,
@@ -222,47 +214,51 @@ class CategoryCard extends StatelessWidget {
                 Text(
                   category.name,
                   style: const TextStyle(
-                    fontSize: 27,
+                    fontSize: 30,
                     color: Colors.black,
-                    // color: Color.fromRGBO(81, 113, 150, 1),
+                    fontFamily: 'SairaCondensed',
                     fontWeight: FontWeight.w600,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.04,
+                  height: MediaQuery.of(context).size.height * 0.034,
                 ),
                 Image.network(
                   category.imageUrl,
                   height: MediaQuery.of(context).size.height * 0.22,
                   fit: BoxFit.cover,
                 ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.05,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width *
+                          0.25, // Adjust the width as needed
+                      height: MediaQuery.of(context).size.height *
+                          0.12, // Adjust the height as needed
+                      decoration: BoxDecoration(
+                        color: AppColors.secondaryColor,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(35.0),
+                          bottomRight: Radius.circular(35.0),
+                          bottomLeft: Radius.circular(5.0),
+                          topRight: Radius.circular(5.0),
+                        ),
+                      ),
+                      child: Icon(
+                        FontAwesomeIcons.add,
+                        size: 40,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                )
               ],
-            ),
-            Positioned(
-              right: -MediaQuery.of(context).size.width * 0.12,
-              // left: 0,
-              bottom: 0,
-              child: Container(
-                width: MediaQuery.of(context).size.width *
-                    0.25, // Adjust the width as needed
-                height: MediaQuery.of(context).size.height *
-                    0.12, // Adjust the height as needed
-                decoration: BoxDecoration(
-                  color: AppColors.secondaryColor,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(35.0),
-                    bottomRight: Radius.circular(35.0),
-                    bottomLeft: Radius.circular(5.0),
-                    topRight: Radius.circular(5.0),
-                  ),
-                ),
-                child: Icon(
-                  FontAwesomeIcons.add,
-                  size: 40,
-                  color: Colors.white,
-                ),
-              ),
             ),
           ],
         ),

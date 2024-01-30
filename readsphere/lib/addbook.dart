@@ -9,7 +9,12 @@ import 'package:readsphere/showBooks.dart';
 import 'package:readsphere/fav_books.dart';
 import 'package:http/http.dart' as http;
 
-class AddBook extends StatelessWidget {
+class AddBook extends StatefulWidget {
+  @override
+  _AddBookState createState() => _AddBookState();
+}
+
+class _AddBookState extends State<AddBook> {
   final TextEditingController name = TextEditingController();
   final TextEditingController author = TextEditingController();
   final TextEditingController rating = TextEditingController();
@@ -17,13 +22,19 @@ class AddBook extends StatelessWidget {
   final TextEditingController genres = TextEditingController();
   final TextEditingController price = TextEditingController();
   final TextEditingController book_path = TextEditingController();
-  var _selectedIndex = 1;
+  int _selectedIndex = 1;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.accentColor,
+        title: Image.network(
+          'https://mostafamohammdi.storage.iran.liara.space/White%20logo%20-%20no%20background.png',
+          width: MediaQuery.of(context).size.width * 0.4,
+          alignment: Alignment.center,
+        ),
+        centerTitle: true,
         actions: [
           IconButton(
               onPressed: () async {
@@ -63,8 +74,8 @@ class AddBook extends StatelessWidget {
               ),
               style: TextStyle(color: AppColors.primaryColor),
             ),
-            const SizedBox(
-              height: 8,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
             ),
             TextField(
               controller: author,
@@ -76,8 +87,8 @@ class AddBook extends StatelessWidget {
               ),
               style: TextStyle(color: AppColors.primaryColor),
             ),
-            const SizedBox(
-              height: 8,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
             ),
             TextField(
               controller: rating,
@@ -89,8 +100,8 @@ class AddBook extends StatelessWidget {
               ),
               style: TextStyle(color: AppColors.primaryColor),
             ),
-            const SizedBox(
-              height: 8,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
             ),
             TextField(
               controller: description,
@@ -103,8 +114,8 @@ class AddBook extends StatelessWidget {
               ),
               style: TextStyle(color: AppColors.primaryColor),
             ),
-            const SizedBox(
-              height: 8,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
             ),
             TextField(
               controller: genres,
@@ -116,8 +127,8 @@ class AddBook extends StatelessWidget {
               ),
               style: TextStyle(color: AppColors.primaryColor),
             ),
-            const SizedBox(
-              height: 8,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
             ),
             TextField(
               controller: price,
@@ -129,8 +140,8 @@ class AddBook extends StatelessWidget {
               ),
               style: TextStyle(color: AppColors.primaryColor),
             ),
-            const SizedBox(
-              height: 8,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.01,
             ),
             TextField(
               controller: book_path,
@@ -143,80 +154,83 @@ class AddBook extends StatelessWidget {
               ),
               style: TextStyle(color: AppColors.primaryColor),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.12,
-            ),
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(50.0),
-                topRight: Radius.circular(50.0),
-                bottomLeft: Radius.circular(50.0),
-                bottomRight: Radius.circular(50.0),
-              ),
-              child: Container(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).size.height * 0.01),
-                width: MediaQuery.of(context).size.width * 0.9,
-                height: MediaQuery.of(context).size.height * 0.1,
-                color: AppColors.secondaryColor,
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15.0, vertical: 8),
-                      child: GNav(
-                        selectedIndex: _selectedIndex,
-                        rippleColor: AppColors.accentColor,
-                        hoverColor: AppColors.accentColor,
-                        tabBackgroundColor: AppColors.accentColor,
-                        gap: 8,
-                        activeColor: AppColors.secondaryColor,
-                        iconSize: 24,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-                        duration: Duration(milliseconds: 400),
-                        color: AppColors.primaryColor,
-                        tabs: [
-                          GButton(
-                            icon: Icons.home,
-                            text: 'Home',
-                          ),
-                          GButton(
-                            icon: CupertinoIcons.book,
-                            text: 'Add',
-                          ),
-                          GButton(
-                            icon: Icons.favorite_border,
-                            text: 'Favorites',
-                          ),
-                          GButton(
-                            icon: FontAwesomeIcons.user,
-                            text: 'Profile',
-                          ),
-                        ],
-                        onTabChange: (index) {
-                          if (index == 0) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Categories()),
-                            );
-                          } else if (index == 2) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => FavoriteBook()),
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        margin: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: AppColors.secondaryColor,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(50.0),
+            topRight: Radius.circular(50.0),
+            bottomLeft: Radius.circular(50.0),
+            bottomRight: Radius.circular(50.0),
+          ),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 20,
+              color: Colors.black.withOpacity(.1),
+            )
+          ],
+        ),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+            child: GNav(
+              textStyle: TextStyle(
+                  fontFamily: 'Signika',
+                  color: AppColors.secondaryColor,
+                  fontSize: 20),
+              selectedIndex: _selectedIndex,
+              rippleColor: AppColors.accentColor,
+              hoverColor: AppColors.accentColor,
+              tabBackgroundColor: AppColors.accentColor,
+              gap: 8,
+              activeColor: AppColors.secondaryColor,
+              iconSize: 24,
+              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+              duration: Duration(milliseconds: 400),
+              // tabBackgroundColor: Colors.grey[100]!,
+              color: AppColors.primaryColor,
+              tabs: [
+                GButton(
+                  icon: Icons.home,
+                  text: 'Home',
+                ),
+                GButton(
+                  icon: CupertinoIcons.book,
+                  text: 'Add',
+                ),
+                GButton(
+                  icon: Icons.favorite_border,
+                  text: 'Favorites',
+                ),
+                GButton(
+                  icon: FontAwesomeIcons.user,
+                  text: 'Profile',
+                ),
+              ],
+
+              onTabChange: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
+
+                if (index == 0) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Categories()),
+                  );
+                } else if (index == 2) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => FavoriteBook()),
+                  );
+                }
+              },
+            ),
+          ),
         ),
       ),
     );

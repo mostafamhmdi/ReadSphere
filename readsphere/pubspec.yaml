@@ -59,6 +59,13 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  fonts:
+    - family: BarlowCondensed
+      fonts:
+        - asset: assets/fonts/BarlowCondensed-Regular.ttf
+    - family: SairaCondensed
+      fonts:
+        - asset: assets/fonts/SairaCondensed-Medium.ttf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

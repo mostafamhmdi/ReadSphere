@@ -23,6 +23,12 @@ class _BookPage extends State<BookPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Image.network(
+          'https://mostafamohammdi.storage.iran.liara.space/White%20logo%20-%20no%20background.png',
+          width: MediaQuery.of(context).size.width * 0.4,
+          alignment: Alignment.center,
+        ),
+        centerTitle: true,
         backgroundColor: AppColors.accentColor,
         iconTheme: IconThemeData(color: Colors.white),
         leading: IconButton(
@@ -40,12 +46,13 @@ class _BookPage extends State<BookPage> {
         children: [
           // Add your text here
           Padding(
-            padding: const EdgeInsets.all(1.0),
+            padding: const EdgeInsets.all(8.0),
             child: Text(
               widget.genre,
               style: TextStyle(
-                color: Colors.white,
-                fontSize: 23.0,
+                color: AppColors.secondaryColor,
+                fontFamily: 'SairaCondensed',
+                fontSize: 30.0,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -410,7 +417,8 @@ class _BookDetails extends State<BookDetails> {
                                               style: TextStyle(
                                                   color: Color.fromARGB(
                                                       100, 255, 255, 255),
-                                                  fontSize: 17,
+                                                  fontSize: 21,
+                                                  fontFamily: 'SairaCondensed',
                                                   fontWeight: FontWeight.w700),
                                             )
                                           ],
@@ -454,9 +462,10 @@ class _BookDetails extends State<BookDetails> {
                                             Text(
                                               'Pages',
                                               style: TextStyle(
+                                                  fontSize: 21,
+                                                  fontFamily: 'SairaCondensed',
                                                   color: Color.fromARGB(
                                                       100, 255, 255, 255),
-                                                  fontSize: 17,
                                                   fontWeight: FontWeight.w700),
                                             ),
                                           ],
@@ -502,7 +511,8 @@ class _BookDetails extends State<BookDetails> {
                                               style: TextStyle(
                                                   color: Color.fromARGB(
                                                       100, 255, 255, 255),
-                                                  fontSize: 17,
+                                                  fontSize: 21,
+                                                  fontFamily: 'SairaCondensed',
                                                   fontWeight: FontWeight.w600),
                                             ),
                                           ],
@@ -528,8 +538,9 @@ class _BookDetails extends State<BookDetails> {
                                             book.name,
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.w500,
+                                              fontFamily: 'BarlowCondensed',
+                                              fontSize: 27,
+                                              fontWeight: FontWeight.w700,
                                             ),
                                             maxLines: 2,
                                             overflow: TextOverflow.ellipsis,
